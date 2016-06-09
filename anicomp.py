@@ -15,18 +15,18 @@ import numpy as np
 
 def compute_density(r,r1,r2,density0):
   ''' compute the equation of state, i.e. eq 23 '''
-  #defining density function
-  a = (2*density0)/(r2 - r1)**3
-  b = (-3*density0)*(r2 + r1)/(r2 - r1)**3
-  c = 6*density0*r1*r2/(r2 - r1)**3
-  d = density0*(r2**3 - 3*r1*r2**2)/(r2 - r1)**3
-
-  if r <= r1 and r >= 0: 
+  if r <= r1 and r >= 0:
     return density0
-  elif r1 < r and r2 > r:
-    return a*r**3 + b*r**2 + c*r + d
-  else:
+  elif r1 >= r or r2 <= r:
     return 0
+
+  #defining density function
+  a = (2*density0)
+  b = (-3*density0)*(r2 + r1)
+  c = 6*density0*r1*r2
+  d = density0*(r2**3 - 3*r1*r2**2)
+
+  return (a*r**3 + b*r**2 + c*r + d)/(r2 - r1)**3
 
 #defining core program: parse r1, r2, m(r2) and a stepsize for evaluation, return mass, pressures, metric functions
 def get_grr(r1, r2, M, stepsize): 
@@ -75,7 +75,7 @@ if __name__ == '__main__':
         mu.append(M/r2)
         delta.append((r2-r1)/M)
 
-#plt.scatter(delta,mu)
-#plt.xlim([0.0,20])
-#plt.ylim([0,0.5])
-#plt.show()
+plt.scatter(delta,mu)
+plt.xlim([0.0,20])
+plt.ylim([0,0.5])
+plt.show()
